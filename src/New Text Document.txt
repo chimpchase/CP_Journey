@@ -1,0 +1,63 @@
+package com.educative.slidingwindow;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public class DNASequances {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 String x = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT";
+		 System.out.println(findRepeatedDnaSequences(x));
+	}
+	
+	static List<String> findRepeatedDnaSequences(String s)  {
+	    int k=10;
+		Set<Integer> set = new HashSet<Integer>();
+		Set<String> result = new HashSet<String>();		
+		
+		for(int i=0;i<s.length()-k+1;i++) {
+			String str = s.substring(i, i+k);
+			int hashVal = getHash(str);
+			if(i>=1) {
+				System.out.println("DE1"+str);
+				int out = getHash(""+str.charAt(i-1));
+				System.out.println("DE2"+out);
+				hashVal -= out;
+				if(hashVal<0) {
+					hashVal+=101;
+				}
+				if(set.contains(hashVal)) {
+					result.add(str);					
+				}
+				else {
+					set.add(hashVal);
+				}
+			}
+			else {
+				set.add(hashVal);				
+			}			
+			//System.out.println(str);
+		}
+		System.out.println(set);	    
+	    return new ArrayList<>(result);
+    }
+	
+	static int getHash(String s) {
+		int sum=0;
+		int base=37;
+		int mod = 101;
+		int alp = s.length()-1;
+		for(int i=0;i<s.length();i++) {
+			int ch = s.charAt(i);
+			sum = (int)(sum+ch*Math.pow(base, alp--)%mod)%mod;
+		}	
+		
+		return sum;
+	}
+
+}
